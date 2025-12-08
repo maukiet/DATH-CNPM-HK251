@@ -1,0 +1,64 @@
+<%- include('partials/header') %>
+
+  <div class="auth-wrapper">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+          <div class="card auth-card shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
+              <div class="text-center mb-4">
+                <h4 class="fw-bold mb-1">Chào mừng trở lại!</h4>
+                <p class="text-muted small">Đăng nhập để tiếp tục</p>
+              </div>
+
+              <form action="/auth/login" method="POST">
+                <div class="mb-4">
+                  <label for="email" class="form-label small fw-bold text-muted text-uppercase ls-1">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" required
+                    placeholder="name@example.com">
+                </div>
+
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label for="password" class="form-label small fw-bold text-muted text-uppercase ls-1 mb-0">Mật
+                      khẩu</label>
+                    <a href="/auth/forgot-password" class="small text-decoration-none">Quên mật khẩu?</a>
+                  </div>
+                  <input type="password" class="form-control" id="password" name="password" required
+                    placeholder="••••••••">
+                </div>
+
+                <div class="d-grid mb-4">
+                  <button type="submit" class="btn btn-primary py-2 fw-bold">
+                    Đăng nhập
+                  </button>
+                </div>
+              </form>
+
+              <div class="position-relative text-center mb-4">
+                <hr class="text-muted opacity-25">
+                <span
+                  class="position-absolute top-50 start-50 translate-middle bg-body px-2 text-muted small">Hoặc</span>
+              </div>
+
+              <div class="d-grid gap-2 mb-4">
+                <a href="/auth/google" class="btn btn-outline-danger btn-sm py-2">
+                  <i class="fab fa-google me-2"></i>Đăng nhập với Google
+                </a>
+                <a href="/auth/facebook" class="btn btn-outline-primary btn-sm py-2">
+                  <i class="fab fa-facebook-f me-2"></i>Đăng nhập với Facebook
+                </a>
+              </div>
+
+              <div class="text-center">
+                <span class="text-muted small">Chưa có tài khoản? </span>
+                <a href="/auth/register" class="fw-bold text-decoration-none">Đăng ký ngay</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>

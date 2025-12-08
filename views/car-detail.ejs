@@ -1,0 +1,196 @@
+<%- include('partials/header') %>
+
+    <div class="container py-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <%= car.brand %>
+                        <%= car.model %>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
+            <!-- ẢNH & MÔ TẢ -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 overflow-hidden mb-4">
+                    <img src="<%= car.image_url || 'https://via.placeholder.com/800x450?text=No+Image' %>"
+                        alt="<%= car.brand %> <%= car.model %>" class="img-fluid w-100 object-fit-cover"
+                        style="max-height: 500px;"
+                        onerror="this.onerror=null;this.src='https://via.placeholder.com/800x450?text=No+Image';">
+                </div>
+
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-3"><i class="fas fa-info-circle text-primary me-2"></i>Mô tả chi tiết</h4>
+                        <p class="mb-0 text-muted" style="white-space: pre-line;">
+                            <%= car.description || 'Chưa có mô tả chi tiết cho xe này.' %>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-3"><i class="fas fa-list-ul text-primary me-2"></i>Thông số kỹ thuật</h4>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between px-0">
+                                        <span class="text-muted">Hãng xe</span>
+                                        <span class="fw-medium">
+                                            <%= car.brand %>
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between px-0">
+                                        <span class="text-muted">Đời xe</span>
+                                        <span class="fw-medium">
+                                            <%= car.model %>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between px-0">
+                                        <span class="text-muted">Năm sản xuất</span>
+                                        <span class="fw-medium">
+                                            <%= car.year %>
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between px-0">
+                                        <span class="text-muted">Số Km đã đi</span>
+                                        <span class="fw-medium">
+                                            <%= car.mileage %> Km
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="col-lg-4">
+                <div class="sticky-top" style="top: 90px; z-index: 10;">
+                    <div class="card shadow-lg border-0 mb-3">
+                        <div class="card-body p-4">
+                            <h2 class="h3 fw-bold mb-1">
+                                <%= car.brand %>
+                                    <%= car.model %>
+                            </h2>
+                            <div class="mb-3">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
+                                    <%= car.year %>
+                                </span>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle ms-1">
+                                    <%= car.status %>
+                                </span>
+                            </div>
+
+                            <h3 class="text-primary fw-bold mb-4">
+                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                    }).format(car.price) %>
+                            </h3>
+
+                            <% if (user) { %>
+                                <% if (isFavorite) { %>
+                                    <button class="btn btn-outline-danger w-100 mb-3" disabled>
+                                        <i class="fas fa-heart me-2"></i>Đã thích
+                                    </button>
+                                    <% } else { %>
+                                        <form action="/wishlist/add" method="POST" class="mb-3">
+                                            <input type="hidden" name="car_id" value="<%= car.id %>">
+                                            <button type="submit" class="btn btn-outline-danger w-100 hover-shadow">
+                                                <i class="far fa-heart me-2"></i>Thêm vào Yêu thích
+                                            </button>
+                                        </form>
+                                        <% } %>
+                                            <% } else { %>
+                                                <a href="/auth/login" class="btn btn-outline-secondary w-100 mb-3">
+                                                    <i class="far fa-heart me-2"></i>Đăng nhập để Yêu thích
+                                                </a>
+                                                <% } %>
+
+                                                    <!-- PayPal Deposit Button -->
+                                                    <% if (user) { %>
+                                                        <form action="/pay" method="POST" class="mb-3">
+                                                            <input type="hidden" name="carId" value="<%= car.id %>">
+                                                            <button type="submit"
+                                                                class="btn btn-warning w-100 fw-bold text-white shadow-sm">
+                                                                <i class="fab fa-paypal me-2"></i>Đặt cọc ngay ($100)
+                                                            </button>
+                                                        </form>
+                                                        <% } %>
+
+                                                            <hr class="my-4">
+
+                                                            <!-- THÔNG TIN NGƯỜI BÁN -->
+                                                            <div class="d-flex align-items-center mb-3">
+                                                                <div class="avatar-circle me-3 flex-shrink-0 bg-primary text-white"
+                                                                    style="width: 48px; height: 48px; font-size: 1.2rem;">
+                                                                    <%= car.seller_name ?
+                                                                        car.seller_name.charAt(0).toUpperCase() : 'S' %>
+                                                                </div>
+                                                                <div>
+                                                                    <h6 class="mb-0 fw-bold">
+                                                                        <%= car.seller_name || 'Người bán' %>
+                                                                    </h6>
+                                                                    <small class="text-muted">Người bán uy tín</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <% if (car.seller_id) { %>
+                                                                <% if (car.seller_phone) { %>
+                                                                    <div class="d-grid mb-2">
+                                                                        <a href="tel:<%= car.seller_phone %>"
+                                                                            class="btn btn-success btn-lg">
+                                                                            <i class="fas fa-phone-alt me-2"></i>
+                                                                            <%= car.seller_phone %>
+                                                                        </a>
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <% } %>
+                        </div>
+                    </div>
+
+                    <!-- LIÊN HỆ FORM -->
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-3">Gửi tin nhắn</h5>
+                            <% if (!car.seller_id) { %>
+                                <p class="text-muted small">
+                                    Xe này chưa gắn với tài khoản người bán.
+                                </p>
+                                <% } else if (user) { %>
+                                    <form action="/messages/send" method="POST">
+                                        <input type="hidden" name="car_id" value="<%= car.id %>">
+                                        <input type="hidden" name="receiver_id" value="<%= car.seller_id %>">
+
+                                        <div class="mb-3">
+                                            <textarea name="content" class="form-control bg-light border-0" rows="3"
+                                                placeholder="Xin chào, tôi quan tâm đến chiếc xe này..."
+                                                required></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-paper-plane me-2"></i>Gửi ngay
+                                        </button>
+                                    </form>
+                                    <% } else { %>
+                                        <div class="text-center">
+                                            <p class="text-muted small mb-3">Đăng nhập để chat trực tiếp với người bán
+                                            </p>
+                                            <a href="/auth/login"
+                                                class="btn btn-outline-primary btn-sm rounded-pill px-4">Đăng nhập</a>
+                                        </div>
+                                        <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>

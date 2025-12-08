@@ -1,0 +1,58 @@
+<%- include('partials/header') %>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-gradient bg-primary text-white border-0 py-3 d-flex align-items-center">
+                        <div class="avatar-circle bg-body text-primary me-3 fw-bold shadow-sm"
+                            style="width: 48px; height: 48px; font-size: 1.25rem;">
+                            <%= profile.full_name ? profile.full_name.charAt(0).toUpperCase() : 'U' %>
+                        </div>
+                        <div>
+                            <h4 class="mb-0 fw-bold">Thông tin cá nhân</h4>
+                            <small class="opacity-75">Quản lý thông tin tài khoản của bạn</small>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <dl class="row mb-0 gy-3">
+                            <dt class="col-sm-4 text-muted small text-uppercase ls-1">Họ và tên</dt>
+                            <dd class="col-sm-8 fw-medium">
+                                <%= profile.full_name %>
+                            </dd>
+
+                            <dt class="col-sm-4 text-muted small text-uppercase ls-1">Email</dt>
+                            <dd class="col-sm-8 fw-medium">
+                                <%= profile.email %>
+                            </dd>
+
+                            <dt class="col-sm-4 text-muted small text-uppercase ls-1">Số điện thoại</dt>
+                            <dd class="col-sm-8 fw-medium">
+                                <%= profile.phone || 'Chưa cập nhật' %>
+                            </dd>
+
+                            <dt class="col-sm-4 text-muted small text-uppercase ls-1">Địa chỉ</dt>
+                            <dd class="col-sm-8 fw-medium">
+                                <%= profile.address || 'Chưa cập nhật' %>
+                            </dd>
+
+                            <dt class="col-sm-4 text-muted small text-uppercase ls-1">Vai trò</dt>
+                            <dd class="col-sm-8">
+                                <span
+                                    class="badge bg-primary-subtle text-primary border border-primary-subtle text-capitalize px-3 py-2 rounded-pill">
+                                    <%= profile.role==='seller' ? 'Người bán' : 'Người mua' %>
+                                </span>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer bg-transparent border-top border-light p-4 text-end">
+                        <a href="/profile/edit" class="btn btn-outline-primary rounded-pill px-4">
+                            <i class="fas fa-edit me-2"></i> Chỉnh sửa thông tin
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>

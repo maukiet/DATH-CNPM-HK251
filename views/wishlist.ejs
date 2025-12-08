@@ -1,0 +1,103 @@
+<%- include('partials/header') %>
+
+    <div class="container py-5">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="fw-bold mb-0 text-danger"><i class="fas fa-heart me-2"></i>Danh Sách Xe Yêu Thích</h2>
+            <a href="/" class="btn btn-outline-secondary rounded-pill btn-sm">
+                <i class="fas fa-arrow-left me-1"></i> Tiếp tục xem xe
+            </a>
+        </div>
+
+        <div class="card shadow-lg border-0 overflow-hidden">
+            <div class="card-body p-0">
+                <% if (!wishlist || wishlist.length===0) { %>
+                    <div class="text-center py-5 bg-white">
+                        <div class="mb-3 text-muted opacity-25">
+                            <i class="far fa-heart fa-4x"></i>
+                        </div>
+                        <h5 class="text-muted fw-bold">Danh sách yêu thích đang trống</h5>
+                        <p class="text-muted small mb-4">Hãy thêm những chiếc xe bạn quan tâm vào đây nhé.</p>
+                        <a href="/" class="btn btn-primary rounded-pill px-4">
+                            Khám phá ngay
+                        </a>
+                    </div>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th scope="col"
+                                            class="py-3 px-4 border-bottom-0 text-muted small text-uppercase ls-1">Xe
+                                        </th>
+                                        <th scope="col"
+                                            class="py-3 px-4 border-bottom-0 text-muted small text-uppercase ls-1">Thông
+                                            tin</th>
+                                        <th scope="col"
+                                            class="py-3 px-4 border-bottom-0 text-muted small text-uppercase ls-1 text-end">
+                                            Giá bán</th>
+                                        <th scope="col"
+                                            class="py-3 px-4 border-bottom-0 text-muted small text-uppercase ls-1 text-end">
+                                            Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% wishlist.forEach(function (item) { %>
+                                        <tr>
+                                            <td class="px-4 py-3" style="width: 180px;">
+                                                <img src="<%= item.image_url || 'https://via.placeholder.com/200x120?text=No+Image' %>"
+                                                    alt="<%= item.brand %> <%= item.model %>"
+                                                    class="img-fluid rounded shadow-sm object-fit-cover"
+                                                    style="height: 100px; width: 100%;"
+                                                    onerror="this.onerror=null;this.src='https://via.placeholder.com/200x120?text=No+Image';">
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <h5 class="mb-1 fw-bold text-dark">
+                                                    <%= item.brand %>
+                                                        <%= item.model %>
+                                                </h5>
+                                                <div class="small text-muted">
+                                                    <span class="me-3"><i class="fas fa-calendar-alt me-1"></i>
+                                                        <%= item.year %>
+                                                    </span>
+                                                    <span><i class="fas fa-tachometer-alt me-1"></i>
+                                                        <%= item.mileage %> km
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-end">
+                                                <span class="text-danger fw-bold fs-5">
+                                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                        currency: 'VND' }).format(item.price) %>
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 text-end">
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <a href="/cars/<%= item.id %>"
+                                                        class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                        Xem
+                                                    </a>
+
+                                                    <form action="/wishlist/remove" method="POST"
+                                                        onsubmit="return confirm('Bạn chắc chắn muốn xóa khỏi danh sách?');">
+                                                        <input type="hidden" name="favorite_id"
+                                                            value="<%= item.favorite_id %>">
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-light text-danger rounded-circle"
+                                                            style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;"
+                                                            title="Xóa">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>

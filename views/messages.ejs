@@ -1,0 +1,131 @@
+<%- include('partials/header') %>
+
+  <div class="container py-4 messages-wrapper">
+    <% if (!conversations || conversations.length===0) { %>
+      <div class="h-100 d-flex flex-column align-items-center justify-content-center text-center">
+        <div class="mb-3 text-muted opacity-50">
+          <i class="far fa-comments fa-4x"></i>
+        </div>
+        <h4 class="text-muted fw-bold">Chưa có tin nhắn</h4>
+        <p class="text-muted small mb-4">Hãy liên hệ với người bán để bắt đầu cuộc trò chuyện.</p>
+        <a href="/" class="btn btn-primary rounded-pill px-4">
+          Khám phá xe ngay
+        </a>
+      </div>
+      <% } else { %>
+        <div class="messages-grid">
+          <!-- Cột trái: Danh sách cuộc trò chuyện -->
+          <div class="inbox-sidebar shadow-sm">
+            <div class="inbox-header">
+              <h5 class="mb-0 fw-bold"><i class="fas fa-inbox me-2 text-primary"></i>Hộp thư</h5>
+            </div>
+            <div class="inbox-list">
+              <% conversations.forEach(function (conv) { const isActive=activeOther && activeCar &&
+                conv.other_id===activeOther.other_id && conv.car_id===activeCar.car_id; %>
+                <button type="button" class="conversation-item <%= isActive ? 'active' : '' %>"
+                  onclick="window.location.href='/messages?otherId=<%= conv.other_id %>&carId=<%= conv.car_id %>'">
+                  <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                    <div class="fw-bold text-truncate" style="max-width: 70%;">
+                      <%= conv.other_name %>
+                    </div>
+                    <small class="text-muted" style="font-size: 0.75rem;">
+                      <%= conv.last_time ? (conv.last_time.toLocaleString ? conv.last_time.toLocaleDateString() :
+                        conv.last_time) : '' %>
+                    </small>
+                  </div>
+                  <div class="small text-muted text-truncate">
+                    <% if (conv.brand) { %>
+                      <i class="fas fa-car me-1 text-secondary"></i>
+                      <%= conv.brand %>
+                        <%= conv.model %>
+                          <% } else { %>
+                            (Không rõ xe)
+                            <% } %>
+                  </div>
+                </button>
+                <% }) %>
+            </div>
+          </div>
+
+          <!-- Cột phải: Khung chat -->
+          <div class="chat-area shadow-sm">
+            <div class="chat-header">
+              <% if (activeOther && activeCar) { %>
+                <div class="d-flex align-items-center">
+                  <div
+                    class="avatar-circle bg-primary text-white me-3 d-flex align-items-center justify-content-center rounded-circle fw-bold"
+                    style="width: 40px; height: 40px;">
+                    <%= activeOther.other_name.charAt(0).toUpperCase() %>
+                  </div>
+                  <div>
+                    <div class="fw-bold">
+                      <%= activeOther.other_name %>
+                    </div>
+                    <div class="small text-muted">
+                      <% if (activeCar.brand) { %>
+                        Quan tâm: <%= activeCar.brand %>
+                          <%= activeCar.model %>
+                            <% } %>
+                    </div>
+                  </div>
+                </div>
+                <% } else { %>
+                  <span class="text-muted fst-italic">Chọn cuộc trò chuyện để xem</span>
+                  <% } %>
+            </div>
+
+            <div class="chat-content" id="chatContent">
+              <% if (!activeOther || !activeCar) { %>
+                <div class="h-100 d-flex flex-column align-items-center justify-content-center text-muted">
+                  <i class="far fa-paper-plane fa-3x mb-3 opacity-25"></i>
+                  <p>Chọn một cuộc trò chuyện để bắt đầu nhắn tin</p>
+                </div>
+                <% } else if (!activeMessages || activeMessages.length===0) { %>
+                  <div class="h-100 d-flex flex-column align-items-center justify-content-center text-muted">
+                    <p>Chưa có tin nhắn nào. Hãy gửi lời chào!</p>
+                  </div>
+                  <% } else { %>
+                    <% activeMessages.forEach(function (msg) { const isMine=(msg.sender_id===(user && user.id)); %>
+                      <div class="chat-bubble <%= isMine ? 'outgoing' : 'incoming' %> shadow-sm">
+                        <div class="message-text">
+                          <%= msg.content %>
+                        </div>
+                        <span class="chat-time text-white-50">
+                          <%= msg.created_at ? (msg.created_at.getHours ? (msg.created_at.getHours() + ':' +
+                            (msg.created_at.getMinutes()<10?'0':'') + msg.created_at.getMinutes()) : msg.created_at)
+                            : '' %>
+                        </span>
+                      </div>
+                      <% }) %>
+                        <% } %>
+            </div>
+
+            <% if (activeOther && activeCar) { %>
+              <div class="chat-input-wrapper">
+                <form method="POST" action="/messages/send" class="d-flex gap-2">
+                  <input type="hidden" name="receiver_id" value="<%= activeOther.other_id %>">
+                  <input type="hidden" name="car_id" value="<%= activeCar.car_id %>">
+
+                  <input type="text" name="content" class="form-control rounded-pill" placeholder="Nhập tin nhắn..."
+                    required autocomplete="off">
+                  <button class="btn btn-primary rounded-circle" type="submit"
+                    style="width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-paper-plane"></i>
+                  </button>
+                </form>
+              </div>
+              <% } %>
+          </div>
+        </div>
+        <% } %>
+  </div>
+
+  <script>
+    // Auto scroll to bottom of chat
+    const chatContent = document.getElementById('chatContent');
+    if (chatContent) {
+      chatContent.scrollTop = chatContent.scrollHeight;
+    }
+  </script>
+
+  <%- include('partials/footer') %>

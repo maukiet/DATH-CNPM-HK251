@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKGENESIS - Mua bán xe uy tín</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fas fa-dharmachakra me-2 text-primary"></i>
+                BKGENESIS
+            </a>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link <%= (typeof active !== 'undefined' && active === 'home') ? 'active' : '' %>"
+                            href="/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= (typeof active !== 'undefined' && active === 'news') ? 'active' : '' %>"
+                            href="/news">Tin tức</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= (typeof active !== 'undefined' && active === 'about') ? 'active' : '' %>"
+                            href="/about">Về chúng tôi</a>
+                    </li>
+
+                    <% if (typeof user !=='undefined' && user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link <%= (typeof active !== 'undefined' && active === 'wishlist') ? 'active' : '' %>"
+                                href="/wishlist">Xe yêu thích</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <%= (typeof active !== 'undefined' && active === 'messages') ? 'active' : '' %>"
+                                href="/messages">
+                                Tin nhắn
+                                <!-- <span class="badge bg-danger rounded-pill ms-1">2</span> -->
+                            </a>
+                        </li>
+                        <% } %>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="btn btn-sm btn-outline-secondary rounded-circle border-0"
+                        title="Chuyển chế độ Sáng/Tối">
+                        <i id="theme-icon" class="fas fa-moon"></i>
+                    </button>
+
+                    <% if (typeof user !=='undefined' && user) { %>
+                        <div class="dropdown">
+                            <a href="#"
+                                class="d-flex align-items-center text-decoration-none dropdown-toggle px-2 py-1 rounded-pill hover-bg-surface text-reset"
+                                id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="avatar-circle me-2 bg-primary text-white"
+                                    style="width: 32px; height: 32px;">
+                                    <%= user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U' %>
+                                </div>
+                                <span class="d-none d-md-inline fw-medium">
+                                    <%= user.full_name %>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-3"
+                                aria-labelledby="userDropdown">
+                                <li>
+                                    <div class="px-3 py-2">
+                                        <div class="fw-bold text-dark">
+                                            <%= user.full_name %>
+                                        </div>
+                                        <small class="text-muted">
+                                            <%= user.email %>
+                                        </small>
+                                    </div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item py-2" href="/profile"><i
+                                            class="fas fa-user me-2 text-primary"></i> Trang cá nhân</a></li>
+
+                                <% if (user.role==='seller' ) { %>
+                                    <li><a class="dropdown-item py-2" href="/seller/cars"><i
+                                                class="fas fa-car me-2 text-success"></i> Xe đang bán</a></li>
+                                    <% } %>
+
+                                        <% if (user && user.role && user.role.toLowerCase()==='admin' ) { %>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li>
+                                                <h6 class="dropdown-header text-uppercase small ls-1">Quản trị</h6>
+                                            </li>
+                                            <li><a class="dropdown-item py-2" href="/admin/users"><i
+                                                        class="fas fa-users-cog me-2 text-info"></i> Tài khoản</a></li>
+                                            <li><a class="dropdown-item py-2" href="/admin/cars"><i
+                                                        class="fas fa-tasks me-2 text-info"></i> Quản lý xe</a></li>
+                                            <% } %>
+
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item py-2 text-danger" href="/auth/logout"><i
+                                                            class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+                            </ul>
+                        </div>
+                        <% } else { %>
+                            <a href="/auth/login" class="btn btn-primary rounded-pill px-4 btn-sm">
+                                Đăng nhập
+                            </a>
+                            <% } %>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <% if (typeof success !=='undefined' && success && success.length) { %>
+            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 bg-success-subtle text-success-emphasis"
+                role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <%= success %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <% } %>
+                <% if (typeof error !=='undefined' && error && error.length) { %>
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 bg-danger-subtle text-danger-emphasis"
+                        role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <% } %>
+    </div>
+
+    <script>
+        // Toggle dark / light theme
+        document.addEventListener('DOMContentLoaded', function () {
+            const html = document.documentElement;
+            const btn = document.getElementById('theme-toggle');
+            const icon = document.getElementById('theme-icon');
+
+            if (!btn || !icon) return;
+
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            btn.addEventListener('click', function () {
+                const current = html.getAttribute('data-theme') || 'light';
+                const next = current === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                updateIcon(next);
+            });
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    icon.classList.add('text-warning');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.remove('text-warning');
+                    icon.classList.add('fa-moon');
+                }
+            }
+        });
+    </script>

@@ -1,0 +1,220 @@
+<%- include('partials/header') %>
+
+    <!-- HERO SECTION -->
+    <header class="hero-section text-center">
+        <div class="container position-relative z-1">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle mb-3 px-3 py-2 rounded-pill">
+                <i class="fas fa-star me-2"></i> #1 Nền tảng mua bán xe uy tín
+            </span>
+            <h1 class="hero-title mb-3">Tìm chiếc xe mơ ước<br>thật dễ dàng</h1>
+            <p class="lead fs-5 text-muted mb-5 mx-auto" style="max-width: 600px;">
+                Hàng ngàn xe chất lượng cao được kiểm định nghiêm ngặt.
+                Minh bạch về giá, an tâm về chất lượng.
+            </p>
+
+            <!-- Floating Search Container -->
+            <div class="search-container mx-auto" style="max-width: 900px;">
+                <div class="search-card glass-panel">
+                    <form action="/search" method="GET">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-lg-5 col-md-12 text-start">
+                                <label class="form-label fw-bold small text-muted text-uppercase ls-1">Tìm kiếm</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0"><i
+                                            class="fas fa-search text-muted"></i></span>
+                                    <input type="text" name="q" class="form-control border-start-0 ps-0"
+                                        placeholder="Nhập tên xe, hãng xe..."
+                                        value="<%= typeof query !== 'undefined' ? query : '' %>">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 text-start">
+                                <label class="form-label fw-bold small text-muted text-uppercase ls-1">Hãng xe</label>
+                                <select name="brand" class="form-select form-select-md">
+                                    <% const selectedBrandSafe=typeof selectedBrand !=='undefined' ? selectedBrand
+                                        : 'all' ; const brandOptions=brands || []; %>
+                                        <option value="all" <%=selectedBrandSafe==='all' ? 'selected' : '' %>>Tất cả
+                                            hãng</option>
+                                        <% brandOptions.forEach(function(b) { %>
+                                            <option value="<%= b.brand %>" <%=selectedBrandSafe===b.brand ? 'selected'
+                                                : '' %>>
+                                                <%= b.brand %>
+                                            </option>
+                                            <% }); %>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-4 col-md-12 d-grid">
+                                <label class="form-label d-none d-lg-block">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary py-2">
+                                    Khám phá ngay
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container py-5" id="car-list">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h3 class="fw-bold m-0"><i class="fas fa-fire text-danger me-2"></i>Xe đang bán chạy</h3>
+
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-muted small fw-bold text-uppercase d-none d-md-block">Sắp xếp:</span>
+                <form action="/" method="GET" id="sortForm">
+                    <select name="sort" class="form-select form-select-sm border-0 bg-transparent fw-bold text-primary"
+                        onchange="document.getElementById('sortForm').submit()" style="cursor: pointer; width: auto;">
+                        <% const sortSafe=typeof sort !=='undefined' ? sort : 'latest' ; %>
+                            <option value="latest" <%=sortSafe==='latest' ? 'selected' : '' %>>Năm mới nhất</option>
+                            <option value="oldest" <%=sortSafe==='oldest' ? 'selected' : '' %>>Năm cũ nhất</option>
+                            <option value="price_asc" <%=sortSafe==='price_asc' ? 'selected' : '' %>>Giá tăng dần
+                            </option>
+                            <option value="price_desc" <%=sortSafe==='price_desc' ? 'selected' : '' %>>Giá giảm dần
+                            </option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <!-- DANH SÁCH XE -->
+        <div class="row g-4">
+            <% if (!cars || cars.length===0) { %>
+                <div class="col-12 py-5 text-center">
+                    <div class="d-inline-block p-4 rounded-circle bg-light mb-3">
+                        <i class="fas fa-car-crash text-muted fa-3x"></i>
+                    </div>
+                    <h5 class="text-muted">Không tìm thấy xe nào phù hợp</h5>
+                    <p class="text-muted small">Vui lòng thử lại với từ khóa khác</p>
+                </div>
+                <% } else { %>
+                    <% cars.forEach(function (car) { %>
+                        <div class="col-md-4">
+                            <div class="card car-card h-100">
+                                <div class="position-relative">
+                                    <img src="<%= car.image_url || 'https://via.placeholder.com/400x240?text=BKGENESIS' %>"
+                                        alt="<%= car.brand %> <%= car.model %>" class="card-img-top" loading="lazy"
+                                        onerror="this.onerror=null;this.src='https://via.placeholder.com/400x240?text=No+Image';">
+                                    <span
+                                        class="position-absolute top-0 start-0 m-3 badge bg-white text-dark shadow-sm">
+                                        <%= car.year %>
+                                    </span>
+                                </div>
+
+                                <div class="card-body d-flex flex-column">
+                                    <div class="mb-2">
+                                        <span
+                                            class="badge bg-primary-subtle text-primary border border-primary-subtle me-1">
+                                            <%= car.brand %>
+                                        </span>
+                                    </div>
+                                    <h5 class="card-title text-truncate">
+                                        <%= car.brand %>
+                                            <%= car.model %>
+                                    </h5>
+                                    <div class="d-flex align-items-center text-muted small mb-3">
+                                        <span class="me-3"><i class="fas fa-tachometer-alt me-1"></i>
+                                            <%= car.mileage %> km
+                                        </span>
+                                        <span><i class="fas fa-calendar-alt me-1"></i>
+                                            <%= car.year %>
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-auto d-flex align-items-end justify-content-between">
+                                        <div class="price-tag">
+                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                                }).format(car.price) %>
+                                        </div>
+                                        <a href="/cars/<%= car.id %>"
+                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            Chi tiết <i class="fas fa-arrow-right list-inline-item ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } %>
+        </div>
+
+        <!-- PAGINATION -->
+        <% if (totalPages> 1) { %>
+            <nav aria-label="Page navigation" class="mt-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                    <div class="text-muted small">
+                        Hiển thị <strong>
+                            <%= cars.length %>
+                        </strong> / <strong>
+                            <%= totalCars %>
+                        </strong> xe
+                        (Trang <strong>
+                            <%= currentPage %>
+                        </strong> / <strong>
+                            <%= totalPages %>
+                        </strong>)
+                    </div>
+                    <ul class="pagination mb-0">
+                        <% if (currentPage> 1) { %>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="/?page=<%= currentPage - 1 %>&sort=<%= sort %>&brand=<%= selectedBrand %><%= query ? '&q=' + query : '' %>">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            <% } %>
+
+                                <% let startPage=Math.max(1, currentPage - 2); let endPage=Math.min(totalPages,
+                                    currentPage + 2); %>
+
+                                    <% if (startPage> 1) { %>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                                href="/?page=1&sort=<%= sort %>&brand=<%= selectedBrand %><%= query ? '&q=' + query : '' %>">1</a>
+                                        </li>
+                                        <% if (startPage> 2) { %>
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            <% } %>
+                                                <% } %>
+
+                                                    <% for (let i=startPage; i <=endPage; i++) { %>
+                                                        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                                            <a class="page-link"
+                                                                href="/?page=<%= i %>&sort=<%= sort %>&brand=<%= selectedBrand %><%= query ? '&q=' + query : '' %>">
+                                                                <%= i %>
+                                                            </a>
+                                                        </li>
+                                                        <% } %>
+
+                                                            <% if (endPage < totalPages) { %>
+                                                                <% if (endPage < totalPages - 1) { %>
+                                                                    <li class="page-item disabled"><span
+                                                                            class="page-link">...</span></li>
+                                                                    <% } %>
+                                                                        <li class="page-item">
+                                                                            <a class="page-link"
+                                                                                href="/?page=<%= totalPages %>&sort=<%= sort %>&brand=<%= selectedBrand %><%= query ? '&q=' + query : '' %>">
+                                                                                <%= totalPages %>
+                                                                            </a>
+                                                                        </li>
+                                                                        <% } %>
+
+                                                                            <% if (currentPage < totalPages) { %>
+                                                                                <li class="page-item">
+                                                                                    <a class="page-link"
+                                                                                        href="/?page=<%= currentPage + 1 %>&sort=<%= sort %>&brand=<%= selectedBrand %><%= query ? '&q=' + query : '' %>">
+                                                                                        <i
+                                                                                            class="fas fa-chevron-right"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <% } %>
+                    </ul>
+                </div>
+            </nav>
+            <% } %>
+    </div>
+
+    <div class="mb-5"></div>
+
+    <%- include('partials/footer') %>

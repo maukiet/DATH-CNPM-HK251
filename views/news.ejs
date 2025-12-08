@@ -1,0 +1,168 @@
+<%- include('partials/header') %>
+
+<style>
+    .news-hero {
+        padding: 60px 0 35px; /* trước là 80px 0 40px */
+        background: linear-gradient(135deg, #0d6efd, #6610f2);
+        color: #fff;
+    }
+
+
+    .news-hero-title {
+        font-size: 2.4rem;
+        font-weight: 700;
+    }
+
+    .news-hero-subtitle {
+        font-size: 1.05rem;
+        max-width: 550px;
+        opacity: 0.95;
+    }
+
+    .news-badge {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.5);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .news-card-img {
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .news-tag-badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+    }
+
+    .news-date {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    /* Dùng màu theo theme chung */
+    .news-main {
+        color: var(--text-main);
+    }
+
+    .news-card {
+        transition: all 0.18s ease-in-out;
+        background-color: var(--bg-card);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] .news-card {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .news-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .news-main > section.pb-5 {
+        margin-top: -20px;
+    }
+
+    .news-main > section.pb-5 > .container {
+        background-color: rgba(248, 250, 252, 0.92);
+        border-radius: 1.5rem;
+        padding: 2rem 1.75rem;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.35);
+    }
+
+    [data-theme="dark"] .news-main > section.pb-5 > .container {
+        background-color: rgba(15, 23, 42, 0.94);
+    }
+
+</style>
+
+<main class="news-main">
+    <section class="news-hero mb-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-7 mb-4 mb-md-0">
+                    <div class="news-badge mb-3">
+                        <i class="fas fa-bolt"></i>
+                        Bản tin công nghệ & mẫu xe mới
+                    </div>
+                    <h1 class="news-hero-title mb-3">
+                        Tin tức ô tô, công nghệ & xu hướng mới
+                    </h1>
+                    <p class="news-hero-subtitle mb-3">
+                        Cập nhật liên tục những mẫu xe vừa ra mắt, công nghệ an toàn – tự lái – điện hóa,
+                        cùng xu hướng thị trường để bạn lựa chọn chiếc xe phù hợp nhất.
+                    </p>
+                    <p class="mb-0 small">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Hiện tại vẫn chưa có bài viết thực tế. Đây là trang demo mẫu giao diện tin tức.
+                        Chúng tôi cập nhật nội dung sớm nhất có thể!
+                    </p>
+                </div>
+                <div class="col-md-5 d-none d-md-block">
+                    <img src="https://www.hdcarwallpapers.com/thumbs/2012/tron_style_lamborghini_aventador-t2.jpg"
+                         alt="Car tech"
+                         class="img-fluid rounded-4 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pb-5">
+        <div class="container">
+            <div class="row g-4">
+                <% if (!newsList || newsList.length === 0) { %>
+                    <div class="col-12 text-center py-5">
+                        <h5>Hiện chưa có bài viết nào.</h5>
+                        <p class="text-muted mb-0">
+                            Hãy thêm dữ liệu tin tức từ controller hoặc CSDL để hiển thị tại đây.
+                        </p>
+                    </div>
+                <% } else { %>
+                    <% newsList.forEach(function(item) { %>
+                        <div class="col-md-4">
+                            <div class="card h-100 news-card">
+                                <img src="<%= item.image %>"
+                                     class="card-img-top news-card-img"
+                                     alt="<%= item.title %>"
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/600x400?text=News';">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-primary-subtle text-primary news-tag-badge">
+                                            <%= item.tag %>
+                                        </span>
+                                        <span class="news-date">
+                                            <i class="far fa-calendar-alt me-1"></i>
+                                            <%= item.date %>
+                                        </span>
+                                    </div>
+                                    <h5 class="card-title mb-2"><%= item.title %></h5>
+                                    <p class="card-text text-muted flex-grow-1">
+                                        <%= item.summary %>
+                                    </p>
+                                    <div class="mt-3">
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary w-100 disabled">
+                                            Đọc thêm (demo)
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

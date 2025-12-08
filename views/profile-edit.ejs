@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Chỉnh sửa thông tin cá nhân</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/profile/edit" method="POST">
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Họ và tên</label>
+                            <input type="text"
+                                    class="form-control"
+                                    id="full_name"
+                                    name="full_name"
+                                    value="<%= profile.full_name %>"
+                                    required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email"
+                                    class="form-control"
+                                    value="<%= profile.email %>"
+                                    disabled>
+                            <small class="text-muted">Email không thể thay đổi.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input type="text"
+                                    class="form-control"
+                                    id="phone"
+                                    name="phone"
+                                    value="<%= profile.phone || '' %>">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text"
+                                    class="form-control"
+                                    id="address"
+                                    name="address"
+                                    value="<%= profile.address || '' %>">
+                        </div>
+
+                        <div class="text-end">
+                            <a href="/profile" class="btn btn-secondary me-2">Hủy</a>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

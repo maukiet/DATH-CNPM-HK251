@@ -1,0 +1,447 @@
+<%- include('partials/header') %>
+
+<style>
+    .about-hero {
+    padding: 60px 0 40px;
+    background: radial-gradient(circle at top left, #0d6efd 0, #0d6efd 35%, #030712 100%);
+    color: #fff;
+}
+
+
+    /* Dùng text theo theme, không ép nền tối nữa */
+    .about-main {
+        color: var(--text-main);
+    }
+
+    .about-hero-title {
+        font-size: 2.7rem;
+        font-weight: 800;
+        letter-spacing: .03em;
+    }
+
+    .about-hero-subtitle {
+        font-size: 1.05rem;
+        max-width: 620px;
+        opacity: 0.95;
+    }
+
+    .about-highlight-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        font-size: .8rem;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+        padding: .25rem .9rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.7);
+        background: rgba(15,23,42,0.2);
+        backdrop-filter: blur(10px);
+    }
+
+    .about-stat-card {
+        border-radius: 1rem;
+        padding: 1.1rem 1.3rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+    }
+
+    [data-theme="dark"] .about-stat-card {
+        background: rgba(15,23,42,0.9);
+        color: #e5e7eb;
+    }
+
+    .about-section-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: .5rem;
+    }
+
+    .about-section-subtitle {
+        color: #9ca3af;
+        font-size: .95rem;
+        max-width: 540px;
+    }
+
+    .about-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        font-size: .8rem;
+        padding: .3rem .7rem;
+        border-radius: 999px;
+        background: rgba(15,23,42,0.3);
+        border: 1px solid rgba(148,163,184,0.5);
+    }
+
+    .about-team-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 999px;
+        object-fit: cover;
+    }
+
+    .about-timeline-step::before {
+        content: "";
+        position: absolute;
+        left: 15px;
+        top: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(to bottom, #0d6efd, #38bdf8);
+        opacity: 0.4;
+    }
+
+    .about-timeline-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #0ea5e9;
+        border: 2px solid #0f172a;
+        position: relative;
+        z-index: 2;
+    }
+
+    .about-values-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(37,99,235,0.12);
+    }
+
+    .about-cta {
+        border-radius: 1.3rem;
+        background: linear-gradient(135deg, #0d6efd, #6366f1);
+        color: #fff;
+        padding: 2rem 1.75rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .about-cta::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 55%);
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    .about-cta-btn {
+        border-radius: 999px;
+        padding: .6rem 1.4rem;
+        font-weight: 600;
+    }
+
+    /* Card thông tin trong phần team & community */
+    .about-info-card {
+        background-color: var(--bg-card);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] .about-info-card {
+        background-color: #020617;
+        color: #e5e7eb;
+    }
+
+    .about-main > section.my-5 {
+        margin-top: -24px;      
+        padding: 32px 0 48px;
+    }
+
+    .about-main > section.my-5 > .container {
+        background-color: rgba(248, 250, 252, 0.92); 
+        border-radius: 1.5rem;
+        padding: 2rem 1.75rem;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.35);
+    }
+
+    [data-theme="dark"] .about-main > section.my-5 > .container {
+        background-color: rgba(15, 23, 42, 0.94);
+    }
+</style>
+
+<main class="about-main">
+    <section class="about-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <div class="about-highlight-badge mb-3">
+                        <i class="fas fa-star"></i>
+                        BKGENESIS - CAR MARKETPLACE
+                    </div>
+                    <h1 class="about-hero-title mb-3">
+                        Nền tảng mua bán xe<br> minh bạch & hiện đại dành cho người Việt
+                    </h1>
+                    <p class="about-hero-subtitle mb-4">
+                        BKGenesis được xây dựng bởi những sinh viên đam mê công nghệ và ô tô,
+                        với mục tiêu mang đến một không gian giao dịch minh bạch, dễ sử dụng,
+                        giúp kết nối người mua – người bán một cách nhanh chóng và an toàn.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="about-pill">
+                            <i class="fas fa-shield-alt text-primary"></i>
+                            Giao dịch minh bạch
+                        </div>
+                        <div class="about-pill">
+                            <i class="fas fa-bolt text-warning"></i>
+                            Công nghệ hiện đại
+                        </div>
+                        <div class="about-pill">
+                            <i class="fas fa-users text-success"></i>
+                            Cộng đồng đam mê xe
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="about-stat-card mb-3">
+                                <div class="about-stat-number">+500</div>
+                                <div class="small text-gray-300">Tin đăng demo</div>
+                                <div class="small text-gray-400">
+                                    Sẵn sàng để mở rộng lên hàng nghìn tin thực tế.
+                                </div>
+                            </div>
+                            <div class="about-stat-card">
+                                <div class="about-stat-number">24/7</div>
+                                <div class="small text-gray-300">Truy cập mọi lúc</div>
+                                <div class="small text-gray-400">Giao diện web tối ưu cho nhiều thiết bị.</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="about-stat-card mb-3">
+                                <div class="about-stat-number">3+</div>
+                                <div class="small text-gray-300">Vai trò tài khoản</div>
+                                <div class="small text-gray-400">Người mua, người bán, admin quản trị hệ thống.</div>
+                            </div>
+                            <div class="about-stat-card">
+                                <div class="about-stat-number">∞</div>
+                                <div class="small text-gray-300">Tiềm năng nâng cấp</div>
+                                <div class="small text-gray-400">
+                                    Dễ dàng tích hợp thêm AI, gợi ý xe, chat real-time, v.v...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="my-5">
+        <div class="container">
+
+            <!-- Sứ mệnh & Tầm nhìn -->
+            <div class="row mb-5">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="about-section-title">Sứ mệnh của BKGenesis</h2>
+                    <p class="about-section-subtitle mb-3">
+                        Chúng tôi không chỉ xây dựng một website, mà là một nền tảng để mọi người
+                        có thể tiếp cận thông tin về xe một cách rõ ràng, dễ hiểu và đáng tin cậy.
+                    </p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex mb-3">
+                            <div class="about-values-icon me-3">
+                                <i class="fas fa-globe-asia text-primary"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">Kết nối người mua & người bán trên toàn quốc</div>
+                                <div class="text-muted small">
+                                    Tạo ra một “chợ xe online” nơi mọi người đều có thể đăng bán, tìm kiếm và trao đổi xe một cách thuận tiện.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex mb-3">
+                            <div class="about-values-icon me-3">
+                                <i class="fas fa-search-dollar text-success"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">Minh bạch thông tin & chi phí</div>
+                                <div class="text-muted small">
+                                    Thông tin xe, giá, số km, năm sản xuất,… được trình bày rõ ràng giúp người mua dễ dàng so sánh và đưa ra quyết định.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex">
+                            <div class="about-values-icon me-3">
+                                <i class="fas fa-laptop-code text-info"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">Ứng dụng công nghệ hiện đại vào trải nghiệm người dùng</div>
+                                <div class="text-muted small">
+                                    Từ giao diện tối/sáng, tới hệ thống tin nhắn, yêu thích, quản lý tin đăng – mọi thứ đều hướng đến sự tiện lợi.
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="about-section-title">Hành trình phát triển</h2>
+                    <p class="about-section-subtitle mb-4">
+                        BKGenesis bắt đầu như một dự án học tập, nhưng hoàn toàn có thể phát triển
+                        thành một sản phẩm thực tế trong tương lai.
+                    </p>
+
+                    <div class="position-relative ps-4 about-timeline-step">
+                        <div class="mb-4 position-relative">
+                            <div class="about-timeline-dot position-absolute" style="left: 0; top: 6px;"></div>
+                            <div class="ms-4">
+                                <div class="small text-primary fw-semibold">Giai đoạn 1 – Ý tưởng & Thiết kế</div>
+                                <div class="fw-semibold">Xây dựng khái niệm chợ xe trực tuyến</div>
+                                <div class="text-muted small">
+                                    Phân tích nhu cầu, xác định chức năng core: đăng tin, xem chi tiết,
+                                    tài khoản người bán/người mua, danh sách yêu thích, tin nhắn.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 position-relative">
+                            <div class="about-timeline-dot position-absolute" style="left: 0; top: 6px;"></div>
+                            <div class="ms-4">
+                                <div class="small text-primary fw-semibold">Giai đoạn 2 – Hiện thực tính năng</div>
+                                <div class="fw-semibold">Hoàn thiện các module quan trọng</div>
+                                <div class="text-muted small">
+                                    Xây dựng backend Node.js/Express, kết nối MySQL, template EJS,
+                                    xử lý đăng nhập, đăng ký, đăng tin, quản lý xe và hệ thống admin.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="position-relative">
+                            <div class="about-timeline-dot position-absolute" style="left: 0; top: 6px;"></div>
+                            <div class="ms-4">
+                                <div class="small text-primary fw-semibold">Giai đoạn 3 – Mở rộng & Tối ưu</div>
+                                <div class="fw-semibold">Hướng tới sản phẩm thực tế</div>
+                                <div class="text-muted small">
+                                    Tối ưu UI/UX, tích hợp thêm chức năng nâng cao như lọc tìm kiếm,
+                                    gợi ý xe, tích hợp AI, phân tích hành vi người dùng, v.v...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team & Cộng đồng -->
+            <div class="row mb-5">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <h2 class="about-section-title">Đội ngũ & cộng đồng</h2>
+                    <p class="about-section-subtitle mb-4">
+                        Dù khởi nguồn là một bài tập lớn, BKGenesis mang tinh thần của một dự án startup:
+                        nghiêm túc, chỉnh chu và luôn sẵn sàng phát triển thêm.
+                    </p>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=400"
+                             class="about-team-avatar me-3"
+                             alt="Team">
+                        <div>
+                            <div class="fw-semibold">Nhóm phát triển BKGenesis</div>
+                            <div class="text-muted small">
+                                Sinh viên HCMUT - CSE, yêu thích lập trình & ô tô.
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Kiến thức vững về lập trình web, CSDL, mạng máy tính.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Tư duy sản phẩm và trải nghiệm người dùng rõ ràng.
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Sẵn sàng nâng cấp tính năng theo phản hồi của người dùng.
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 shadow-sm about-info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-user-shield text-primary me-2"></i>
+                                        Trải nghiệm người dùng an toàn
+                                    </h5>
+                                    <p class="card-text text-muted small">
+                                        Hệ thống phân quyền rõ ràng: người mua, người bán, admin.
+                                        Dễ dàng quản lý tin đăng, tin nhắn và danh sách yêu thích của riêng mình.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 shadow-sm about-info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-car-side text-danger me-2"></i>
+                                        Dành cho người thật sự yêu xe
+                                    </h5>
+                                    <p class="card-text text-muted small">
+                                        Không chỉ là nơi “mua – bán”, BKGenesis hướng đến cộng đồng
+                                        những người yêu xe, chia sẻ kinh nghiệm và kiến thức về xe.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card h-100 border-0 shadow-sm about-info-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-seedling text-success me-2"></i>
+                                        Dự án học tập – tiềm năng startup
+                                    </h5>
+                                    <p class="card-text text-muted small">
+                                        Mỗi dòng code, mỗi tính năng đều được xây dựng như một sản phẩm thật.
+                                        Nếu có cơ hội, BKGenesis hoàn toàn có thể trở thành nền tảng mua bán xe
+                                        chuyên nghiệp trong tương lai.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="about-cta mb-5">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="fw-bold mb-2">Bạn muốn đồng hành cùng BKGenesis?</h3>
+                        <p class="mb-3">
+                            Dù bạn là người mua, người bán, hay một dev yêu thích ô tô, hãy cùng đóng góp ý tưởng
+                            và xây dựng một nền tảng tốt hơn nữa.
+                        </p>
+                        <p class="mb-0 small">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Mọi ý kiến đóng góp đều quý giá – hãy liên hệ với chúng tôi qua email
+                            <a href="mailto: gkiet8590gmail.com" class="text-white fw-semibold">gkiet8590gmail.com</a>
+                            hoặc qua trang Facebook của dự án.
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <a href="/" class="btn btn-light about-cta-btn mb-2">
+                            Xem các tin đăng hiện có
+                        </a>
+                        <br>
+                        <a href="/seller/cars" class="btn btn-outline-light about-cta-btn">
+                            Đăng tin bán xe (dành cho seller)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>
