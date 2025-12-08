@@ -138,7 +138,7 @@ bkgenesis/
 
 ### Bước 1: Clone dự án
 ```bash
-git clone https://github.com/your-repo/bkgenesis.git
+gh repo clone maukiet/DATH-CNPM-HK251
 cd bkgenesis
 ```
 
