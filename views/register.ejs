@@ -17,7 +17,8 @@
                     <label for="full_name" class="form-label small fw-bold text-muted text-uppercase ls-1">Họ và
                       Tên</label>
                     <input type="text" class="form-control" id="full_name" name="full_name" required
-                      placeholder="Nguyễn Văn A">
+                      placeholder="Nguyễn Văn A" pattern="^[a-zA-ZÀ-ỹ\s]+$"
+                      title="Họ tên chỉ được chứa chữ cái và khoảng trắng">
                   </div>
 
                   <div class="col-12">
@@ -36,7 +37,8 @@
                   <div class="col-md-6">
                     <label for="phone" class="form-label small fw-bold text-muted text-uppercase ls-1">Số điện
                       thoại</label>
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="0912...">
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="0912..."
+                      pattern="^[0-9]{10,11}$" title="Số điện thoại phải có 10-11 chữ số">
                   </div>
 
                   <div class="col-md-6">
@@ -102,5 +104,29 @@
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const fullNameInput = document.getElementById('full_name');
+      const phoneInput = document.getElementById('phone');
+
+      // Chặn nhập số vào trường họ tên
+      fullNameInput.addEventListener('input', function (e) {
+        this.value = this.value.replace(/[0-9]/g, '');
+      });
+
+      // Chặn nhập chữ vào trường số điện thoại
+      phoneInput.addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      // Giới hạn độ dài số điện thoại
+      phoneInput.addEventListener('input', function (e) {
+        if (this.value.length > 11) {
+          this.value = this.value.slice(0, 11);
+        }
+      });
+    });
+  </script>
 
   <%- include('partials/footer') %>
