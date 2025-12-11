@@ -8,6 +8,14 @@
             </a>
         </div>
 
+        <!-- Thanh tìm kiếm -->
+        <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                <input type="text" class="form-control" id="searchInput" placeholder="Tìm theo hãng xe, model...">
+            </div>
+        </div>
+
         <div class="card shadow-sm">
             <div class="card-body">
                 <% if (!posts || posts.length===0) { %>
@@ -103,5 +111,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function () {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+    </script>
 
     <%- include('partials/footer') %>

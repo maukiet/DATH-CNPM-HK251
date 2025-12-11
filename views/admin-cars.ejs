@@ -6,6 +6,15 @@
             <p class="mb-0 text-muted">Admin có thể xem, duyệt & xóa xe trong hệ thống.</p>
         </div>
 
+        <!-- Thanh tìm kiếm -->
+        <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                <input type="text" class="form-control" id="searchInput"
+                    placeholder="Tìm theo hãng xe, model, người bán...">
+            </div>
+        </div>
+
         <div class="row mb-4">
             <div class="col-md-12">
                 <div class="card shadow-sm border-0">
@@ -191,6 +200,16 @@
                     }
                 });
             }
+        });
+
+        // Tìm kiếm xe
+        document.getElementById('searchInput').addEventListener('keyup', function () {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
         });
     </script>
 

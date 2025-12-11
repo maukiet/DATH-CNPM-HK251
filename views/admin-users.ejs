@@ -23,6 +23,7 @@
                                         <th>Địa chỉ</th>
                                         <th>Vai trò</th>
                                         <th>Ngày tạo</th>
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,6 +55,18 @@
                                             </td>
                                             <td>
                                                 <%= u.created_at ? u.created_at.toLocaleString('vi-VN') : '' %>
+                                            </td>
+                                            <td>
+                                                <% if (u.role !=='admin' ) { %>
+                                                    <form method="POST" action="/admin/users/<%= u.id %>/delete"
+                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này? Thao tác không thể hoàn tác.');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="fas fa-trash-alt me-1"></i> Xóa
+                                                        </button>
+                                                    </form>
+                                                    <% } else { %>
+                                                        <span class="text-muted small">-</span>
+                                                        <% } %>
                                             </td>
                                         </tr>
                                         <% }) %>

@@ -279,3 +279,54 @@ exports.postEditCar = (req, res) => {
         });
     });
 };
+
+/**
+ * POST /admin/users/:userId/delete
+ * Admin xóa tài khoản người dùng (không xóa được admin)
+ */
+exports.deleteUser = (req, res) => {
+    const userId = req.params.userId;
+
+    if (!userId) {
+        req.flash('error', 'Thiếu ID tài khoản.');
+        return res.redirect('/admin/users');
+    }
+
+    // Kiểm tra không cho xóa admin
+    const checkSql = 'SELECT role FROM users WHERE id = ?';
+    db.query(checkSql, [userId], (err, rows) => {
+        if (err) {
+            console.error('deleteUser - check error:', err);
+            req.flash('error', 'Lỗi khi kiểm tra tài khoản.');
+            return res.redirect('/admin/users');
+        }
+
+        if (!rows || rows.length === 0) {
+            req.flash('error', 'Không tìm thấy tài khoản.');
+            return res.redirect('/admin/users');
+        }
+
+        if (rows[0].role === 'admin') {
+            req.flash('error', 'Không thể xóa tài khoản admin.');
+            return res.redirect('/admin/users');
+        }
+
+        // Xóa tài khoản
+        const deleteSql = 'DELETE FROM users WHERE id = ?';
+        db.query(deleteSql, [userId], (deleteErr, result) => {
+            if (deleteErr) {
+                console.error('deleteUser error:', deleteErr);
+                req.flash('error', 'Không thể xóa tài khoản.');
+                return res.redirect('/admin/users');
+            }
+
+            if (result.affectedRows === 0) {
+                req.flash('error', 'Không tìm thấy tài khoản cần xóa.');
+            } else {
+                req.flash('success', 'Đã xóa tài khoản thành công.');
+            }
+
+            return res.redirect('/admin/users');
+        });
+    });
+};

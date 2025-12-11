@@ -158,7 +158,7 @@ router.get('/seller/cars/new', isSeller, sellerController.getNewCarForm);
 router.post(
   '/seller/cars/new',
   isSeller,
-  upload.single('image'),          // name="image" trong form
+  upload.single('image'),         
   (req, res, next) => {
     // Nếu có file, set image_url = đường dẫn public
     if (req.file) {
@@ -219,6 +219,9 @@ router.get('/pay/cancel', paymentController.cancelPayment);
 
 // Danh sách user
 router.get('/admin/users', isAuthenticated, isAdmin, adminController.getUsersList);
+
+// Xóa tài khoản người dùng
+router.post('/admin/users/:userId/delete', isAuthenticated, isAdmin, adminController.deleteUser);
 
 // Danh sách xe
 router.get('/admin/cars', isAuthenticated, isAdmin, adminController.getCarsList);
