@@ -79,7 +79,26 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 
 -- ===========================
--- 6. DỮ LIỆU XE MẪU
+-- 6. BẢNG TRANSACTIONS (GIAO DỊCH/HÓA ĐƠN)
+-- ===========================
+CREATE TABLE IF NOT EXISTS transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    car_id INT NOT NULL,
+    amount DECIMAL(15, 2) NOT NULL,
+    currency VARCHAR(10) DEFAULT 'USD',
+    paypal_payment_id VARCHAR(100),
+    paypal_payer_id VARCHAR(100),
+    status ENUM('pending', 'completed', 'cancelled', 'refunded') DEFAULT 'pending',
+    description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (car_id) REFERENCES cars(id) ON DELETE CASCADE
+);
+
+-- ===========================
+-- 7. DỮ LIỆU XE MẪU
+-- ===========================
 -- ===========================
 -- Dùng INSERT IGNORE để nếu (brand, model, year) đã tồn tại thì KHÔNG insert lại
 UPDATE cars 

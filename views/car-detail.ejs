@@ -113,45 +113,64 @@
                                                 </a>
                                                 <% } %>
 
-                                                    <!-- PayPal Deposit Button -->
+                                                    <!-- PayPal Buttons -->
                                                     <% if (user) { %>
-                                                        <form action="/pay" method="POST" class="mb-3">
+                                                        <!-- Nút Đặt cọc -->
+                                                        <form action="/pay" method="POST" class="mb-2">
                                                             <input type="hidden" name="carId" value="<%= car.id %>">
+                                                            <input type="hidden" name="type" value="deposit">
                                                             <button type="submit"
-                                                                class="btn btn-warning w-100 fw-bold text-white shadow-sm">
-                                                                <i class="fab fa-paypal me-2"></i>Đặt cọc ngay ($100)
+                                                                class="btn btn-warning w-100 fw-bold shadow-sm">
+                                                                <i class="fab fa-paypal me-2"></i>Đặt cọc ($100)
                                                             </button>
                                                         </form>
-                                                        <% } %>
+                                                        <!-- Nút Mua ngay -->
+                                                        <form action="/pay" method="POST" class="mb-3">
+                                                            <input type="hidden" name="carId" value="<%= car.id %>">
+                                                            <input type="hidden" name="type" value="purchase">
+                                                            <button type="submit"
+                                                                class="btn btn-success w-100 fw-bold shadow-sm">
+                                                                <i class="fas fa-shopping-cart me-2"></i>Mua ngay
+                                                            </button>
+                                                        </form>
+                                                        <% } else { %>
+                                                            <a href="/auth/login"
+                                                                class="btn btn-outline-success w-100 mb-3">
+                                                                <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập để mua
+                                                                xe
+                                                            </a>
+                                                            <% } %>
 
-                                                            <hr class="my-4">
+                                                                <hr class="my-4">
 
-                                                            <!-- THÔNG TIN NGƯỜI BÁN -->
-                                                            <div class="d-flex align-items-center mb-3">
-                                                                <div class="avatar-circle me-3 flex-shrink-0 bg-primary text-white"
-                                                                    style="width: 48px; height: 48px; font-size: 1.2rem;">
-                                                                    <%= car.seller_name ?
-                                                                        car.seller_name.charAt(0).toUpperCase() : 'S' %>
-                                                                </div>
-                                                                <div>
-                                                                    <h6 class="mb-0 fw-bold">
-                                                                        <%= car.seller_name || 'Người bán' %>
-                                                                    </h6>
-                                                                    <small class="text-muted">Người bán uy tín</small>
-                                                                </div>
-                                                            </div>
-
-                                                            <% if (car.seller_id) { %>
-                                                                <% if (car.seller_phone) { %>
-                                                                    <div class="d-grid mb-2">
-                                                                        <a href="tel:<%= car.seller_phone %>"
-                                                                            class="btn btn-success btn-lg">
-                                                                            <i class="fas fa-phone-alt me-2"></i>
-                                                                            <%= car.seller_phone %>
-                                                                        </a>
+                                                                <!-- THÔNG TIN NGƯỜI BÁN -->
+                                                                <div class="d-flex align-items-center mb-3">
+                                                                    <div class="avatar-circle me-3 flex-shrink-0 bg-primary text-white"
+                                                                        style="width: 48px; height: 48px; font-size: 1.2rem;">
+                                                                        <%= car.seller_name ?
+                                                                            car.seller_name.charAt(0).toUpperCase()
+                                                                            : 'S' %>
                                                                     </div>
-                                                                    <% } %>
+                                                                    <div>
+                                                                        <h6 class="mb-0 fw-bold">
+                                                                            <%= car.seller_name || 'Người bán' %>
+                                                                        </h6>
+                                                                        <small class="text-muted">Người bán uy
+                                                                            tín</small>
+                                                                    </div>
+                                                                </div>
+
+                                                                <% if (car.seller_id) { %>
+                                                                    <% if (car.seller_phone) { %>
+                                                                        <div class="d-grid mb-2">
+                                                                            <a href="tel:<%= car.seller_phone %>"
+                                                                                class="btn btn-success btn-lg">
+                                                                                <i class="fas fa-phone-alt me-2"></i>
+                                                                                <%= car.seller_phone %>
+                                                                            </a>
+                                                                        </div>
                                                                         <% } %>
+                                                                            <% } %>
                         </div>
                     </div>
 

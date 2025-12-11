@@ -1,0 +1,88 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2><i class="fas fa-file-invoice-dollar text-primary me-2"></i>Lịch sử giao dịch</h2>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <% if (!transactions || transactions.length===0) { %>
+                    <div class="text-center py-5">
+                        <i class="fas fa-receipt fa-4x text-muted mb-3"></i>
+                        <p class="mb-0 text-muted">Bạn chưa có giao dịch nào.</p>
+                        <a href="/" class="btn btn-primary mt-3">Khám phá xe ngay</a>
+                    </div>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Xe</th>
+                                        <th>Số tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Mã giao dịch</th>
+                                        <th>Ngày thanh toán</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% transactions.forEach(function(t, index) { %>
+                                        <tr>
+                                            <td>
+                                                <%= index + 1 %>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="<%= t.image_url || 'https://via.placeholder.com/60x40?text=Car' %>"
+                                                        alt="<%= t.brand %> <%= t.model %>" class="rounded me-2"
+                                                        style="width: 60px; height: 40px; object-fit: cover;"
+                                                        onerror="this.onerror=null;this.src='https://via.placeholder.com/60x40?text=Car';">
+                                                    <div>
+                                                        <div class="fw-bold">
+                                                            <%= t.brand %>
+                                                                <%= t.model %>
+                                                        </div>
+                                                        <small class="text-muted">Năm <%= t.year %></small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="fw-bold text-success">
+                                                $<%= t.amount.toFixed(2) %>
+                                                    <%= t.currency %>
+                                            </td>
+                                            <td>
+                                                <% if (t.status==='completed' ) { %>
+                                                    <span class="badge bg-success"><i class="fas fa-check me-1"></i>Hoàn
+                                                        thành</span>
+                                                    <% } else if (t.status==='pending' ) { %>
+                                                        <span class="badge bg-warning text-dark"><i
+                                                                class="fas fa-clock me-1"></i>Đang xử lý</span>
+                                                        <% } else if (t.status==='cancelled' ) { %>
+                                                            <span class="badge bg-danger"><i
+                                                                    class="fas fa-times me-1"></i>Đã hủy</span>
+                                                            <% } else { %>
+                                                                <span class="badge bg-secondary">
+                                                                    <%= t.status %>
+                                                                </span>
+                                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <code class="small"><%= t.paypal_payment_id || '-' %></code>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    <%= new Date(t.created_at).toLocaleString('vi-VN') %>
+                                                </small>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>

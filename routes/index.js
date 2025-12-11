@@ -158,7 +158,7 @@ router.get('/seller/cars/new', isSeller, sellerController.getNewCarForm);
 router.post(
   '/seller/cars/new',
   isSeller,
-  upload.single('image'),         
+  upload.single('image'),
   (req, res, next) => {
     // Nếu có file, set image_url = đường dẫn public
     if (req.file) {
@@ -212,6 +212,9 @@ const paymentController = require('../controllers/paymentController');
 router.post('/pay', isAuthenticated, paymentController.createPayment);
 router.get('/pay/success', paymentController.executePayment);
 router.get('/pay/cancel', paymentController.cancelPayment);
+
+// Lịch sử hóa đơn/giao dịch
+router.get('/invoices', isAuthenticated, paymentController.getInvoices);
 
 /* ==========================================================
    ADMIN
