@@ -1,0 +1,81 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>👤 Quản lý tài khoản</h2>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <% if (!users || users.length===0) { %>
+                    <div class="text-center py-4">
+                        <p class="mb-0">Chưa có tài khoản nào trong hệ thống.</p>
+                    </div>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Họ tên</th>
+                                        <th>Email</th>
+                                        <th>SĐT</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Vai trò</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% users.forEach(function(u, index) { %>
+                                        <tr>
+                                            <td>
+                                                <%= index + 1 %>
+                                            </td>
+                                            <td>
+                                                <%= u.full_name %>
+                                            </td>
+                                            <td>
+                                                <%= u.email %>
+                                            </td>
+                                            <td>
+                                                <%= u.phone || '-' %>
+                                            </td>
+                                            <td>
+                                                <%= u.address || '-' %>
+                                            </td>
+                                            <td>
+                                                <% if (u.role==='admin' ) { %>
+                                                    <span class="badge bg-danger">Admin</span>
+                                                    <% } else if (u.role==='seller' ) { %>
+                                                        <span class="badge bg-primary">Seller</span>
+                                                        <% } else { %>
+                                                            <span class="badge bg-secondary">Customer</span>
+                                                            <% } %>
+                                            </td>
+                                            <td>
+                                                <%= u.created_at ? u.created_at.toLocaleString('vi-VN') : '' %>
+                                            </td>
+                                            <td>
+                                                <% if (u.role !=='admin' ) { %>
+                                                    <form method="POST" action="/admin/users/<%= u.id %>/delete"
+                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này? Thao tác không thể hoàn tác.');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="fas fa-trash-alt me-1"></i> Xóa
+                                                        </button>
+                                                    </form>
+                                                    <% } else { %>
+                                                        <span class="text-muted small">-</span>
+                                                        <% } %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
