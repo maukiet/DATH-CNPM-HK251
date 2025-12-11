@@ -22,8 +22,8 @@
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-end-0"><i
                                             class="fas fa-search text-muted"></i></span>
-                                    <input type="text" name="q" class="form-control border-start-0 ps-0"
-                                        placeholder="Nhập tên xe, hãng xe..."
+                                    <input type="text" name="q" id="heroSearchInput"
+                                        class="form-control border-start-0 ps-0" placeholder="Nhập tên xe, hãng xe..."
                                         value="<%= typeof query !== 'undefined' ? query : '' %>">
                                 </div>
                             </div>
@@ -216,5 +216,38 @@
     </div>
 
     <div class="mb-5"></div>
+
+    <script>
+        // Real-time search filtering
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('heroSearchInput');
+            const carCards = document.querySelectorAll('#car-list .row > .col-md-4');
+            const brandSelect = document.querySelector('select[name="brand"]');
+            const sortSelect = document.querySelector('select[name="sort"]');
+
+            function filterCars() {
+                const searchText = searchInput ? searchInput.value.toLowerCase() : '';
+                const selectedBrand = brandSelect ? brandSelect.value : 'all';
+
+                carCards.forEach(card => {
+                    const cardText = card.textContent.toLowerCase();
+                    const brandBadge = card.querySelector('.badge');
+                    const cardBrand = brandBadge ? brandBadge.textContent.trim() : '';
+
+                    const matchSearch = cardText.includes(searchText);
+                    const matchBrand = selectedBrand === 'all' || cardBrand === selectedBrand;
+
+                    card.style.display = (matchSearch && matchBrand) ? '' : 'none';
+                });
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('keyup', filterCars);
+            }
+            if (brandSelect) {
+                brandSelect.addEventListener('change', filterCars);
+            }
+        });
+    </script>
 
     <%- include('partials/footer') %>
