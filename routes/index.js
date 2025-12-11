@@ -175,6 +175,17 @@ router.post('/seller/cars/:postId/delete', isSeller, sellerController.deletePost
 // Gia hạn bài đăng
 router.post('/seller/cars/:postId/renew', isSeller, sellerController.renewPost);
 
+// Form sửa xe
+router.get('/seller/cars/:postId/edit', isSeller, sellerController.getEditCarForm);
+
+// Xử lý sửa xe (có upload ảnh)
+router.post(
+  '/seller/cars/:postId/edit',
+  isSeller,
+  upload.single('image_file'),
+  sellerController.postEditCar
+);
+
 /* ==========================================================
    WISHLIST (YÊU THÍCH)
    ========================================================== */
@@ -221,6 +232,18 @@ router.post('/admin/cars/:carId/delete', isAuthenticated, isAdmin, adminControll
 
 // Duyệt bài đăng
 router.post('/admin/cars/:postId/approve', isAuthenticated, isAdmin, adminController.approvePost);
+
+// Form sửa xe (Admin)
+router.get('/admin/cars/:postId/edit', isAuthenticated, isAdmin, adminController.getEditCarForm);
+
+// Xử lý sửa xe (Admin)
+router.post(
+  '/admin/cars/:postId/edit',
+  isAuthenticated,
+  isAdmin,
+  upload.single('image_file'),
+  adminController.postEditCar
+);
 
 /* ==========================================================
    TRANG TĨNH: TIN TỨC / VỀ CHÚNG TÔI

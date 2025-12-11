@@ -73,14 +73,14 @@ exports.getCarsList = (req, res) => {
                 // Nếu lỗi thống kê thì vẫn hiện danh sách xe, nhưng stats rỗng
                 return res.render('admin-cars', {
                     cars: carResults,
-                    stats: [] 
+                    stats: []
                 });
             }
 
             // --- QUAN TRỌNG: Truyền cả 'cars' và 'stats' xuống view ---
             return res.render('admin-cars', {
                 cars: carResults,
-                stats: statResults || [] 
+                stats: statResults || []
             });
         });
     });
@@ -145,5 +145,137 @@ exports.approvePost = (req, res) => {
         }
 
         return res.redirect('/admin/cars');
+    });
+};
+
+/**
+ * GET /admin/cars/:postId/edit
+ * Admin xem form sửa xe
+ */
+exports.getEditCarForm = (req, res) => {
+    const postId = req.params.postId;
+
+    const sql = `
+        SELECT 
+            p.id AS post_id,
+            p.status AS post_status,
+            c.id AS car_id,
+            c.brand,
+            c.model,
+            c.year,
+            c.price,
+            c.mileage,
+            c.description,
+            c.image_url
+        FROM posts p
+        JOIN cars c ON p.car_id = c.id
+        WHERE p.id = ?
+    `;
+
+    db.query(sql, [postId], (err, rows) => {
+        if (err) {
+            console.error('admin getEditCarForm error:', err);
+            req.flash('error', 'Không tải được thông tin xe.');
+            return res.redirect('/admin/cars');
+        }
+
+        if (!rows || rows.length === 0) {
+            req.flash('error', 'Không tìm thấy bài đăng.');
+            return res.redirect('/admin/cars');
+        }
+
+        res.render('seller-car-edit', {
+            car: rows[0],
+            backUrl: '/admin/cars',
+            formAction: `/admin/cars/${postId}/edit`
+        });
+    });
+};
+
+/**
+ * POST /admin/cars/:postId/edit
+ * Admin cập nhật thông tin xe
+ */
+exports.postEditCar = (req, res) => {
+    const postId = req.params.postId;
+    const { brand, model, year, price, mileage, description, image_url } = req.body;
+
+    // Validate cơ bản
+    if (!brand || !model || !year || !price) {
+        req.flash('error', 'Vui lòng nhập đầy đủ các trường bắt buộc.');
+        return res.redirect(`/admin/cars/${postId}/edit`);
+    }
+
+    // Lấy car_id từ post
+    const checkSql = 'SELECT car_id FROM posts WHERE id = ?';
+
+    db.query(checkSql, [postId], (err, rows) => {
+        if (err) {
+            console.error('admin postEditCar - check error:', err);
+            req.flash('error', 'Lỗi khi kiểm tra bài đăng.');
+            return res.redirect('/admin/cars');
+        }
+
+        if (!rows || rows.length === 0) {
+            req.flash('error', 'Không tìm thấy bài đăng.');
+            return res.redirect('/admin/cars');
+        }
+
+        const carId = rows[0].car_id;
+        const yearInt = parseInt(year, 10) || new Date().getFullYear();
+        const mileageInt = mileage ? parseInt(mileage, 10) : 0;
+        const priceNum = price ? parseFloat(price) : 0;
+
+        // Xác định ảnh cuối cùng
+        let finalImageUrl = null;
+        if (req.file) {
+            finalImageUrl = `/uploads/cars/${req.file.filename}`;
+        } else if (image_url && image_url.trim() !== '') {
+            finalImageUrl = image_url.trim();
+        }
+
+        // Build update query
+        let updateSql, params;
+        if (finalImageUrl) {
+            updateSql = `
+                UPDATE cars SET
+                    brand = ?,
+                    model = ?,
+                    year = ?,
+                    price = ?,
+                    mileage = ?,
+                    description = ?,
+                    image_url = ?
+                WHERE id = ?
+            `;
+            params = [brand, model, yearInt, priceNum, mileageInt, description || null, finalImageUrl, carId];
+        } else {
+            updateSql = `
+                UPDATE cars SET
+                    brand = ?,
+                    model = ?,
+                    year = ?,
+                    price = ?,
+                    mileage = ?,
+                    description = ?
+                WHERE id = ?
+            `;
+            params = [brand, model, yearInt, priceNum, mileageInt, description || null, carId];
+        }
+
+        db.query(updateSql, params, (updateErr) => {
+            if (updateErr) {
+                console.error('admin postEditCar - update error:', updateErr);
+                req.flash('error', 'Không thể cập nhật xe.');
+                return res.redirect(`/admin/cars/${postId}/edit`);
+            }
+
+            // Cập nhật title trong posts
+            const newTitle = `${brand} ${model} ${yearInt}`;
+            db.query('UPDATE posts SET title = ? WHERE id = ?', [newTitle, postId], () => {
+                req.flash('success', 'Đã cập nhật thông tin xe thành công.');
+                return res.redirect('/admin/cars');
+            });
+        });
     });
 };

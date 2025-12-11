@@ -109,6 +109,11 @@
                                                         </form>
                                                         <% } %>
 
+                                                            <a href="/admin/cars/<%= item.post_id %>/edit"
+                                                                class="btn btn-sm btn-warning w-100">
+                                                                <i class="fas fa-edit me-1"></i> Sửa
+                                                            </a>
+
                                                             <form method="POST"
                                                                 action="/admin/cars/<%= item.car_id %>/delete"
                                                                 onsubmit="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn xóa xe này? Dữ liệu không thể khôi phục.');">
