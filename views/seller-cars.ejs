@@ -8,11 +8,29 @@
             </a>
         </div>
 
-        <!-- Thanh tìm kiếm -->
-        <div class="mb-3">
-            <div class="input-group">
-                <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
-                <input type="text" class="form-control" id="searchInput" placeholder="Tìm theo hãng xe, model...">
+        <!-- Thanh tìm kiếm và lọc -->
+        <div class="row mb-3 g-2">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Tìm theo hãng xe, model...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="filterStatus">
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="available">Đang bán</option>
+                    <option value="hidden">Đã ẩn</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" id="sortSelect">
+                    <option value="default">Sắp xếp mặc định</option>
+                    <option value="price_asc">Giá tăng dần</option>
+                    <option value="price_desc">Giá giảm dần</option>
+                    <option value="year_desc">Năm mới nhất</option>
+                    <option value="year_asc">Năm cũ nhất</option>
+                </select>
             </div>
         </div>
 
@@ -113,14 +131,54 @@
     </div>
 
     <script>
-        document.getElementById('searchInput').addEventListener('keyup', function () {
-            const filter = this.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
-            rows.forEach(row => {
+        const table = document.querySelector('tbody');
+        const rows = Array.from(document.querySelectorAll('tbody tr'));
+
+        function applyFilters() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('filterStatus').value;
+            const sortValue = document.getElementById('sortSelect').value;
+
+            // Filter
+            let filtered = rows.filter(row => {
                 const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(filter) ? '' : 'none';
+                const status = row.querySelector('.badge')?.textContent.toLowerCase() || '';
+
+                const matchSearch = text.includes(searchText);
+                const matchStatus = statusFilter === 'all' ||
+                    (statusFilter === 'available' && status.includes('đang bán')) ||
+                    (statusFilter === 'hidden' && status.includes('ẩn'));
+
+                return matchSearch && matchStatus;
             });
-        });
+
+            // Sort
+            if (sortValue !== 'default') {
+                filtered.sort((a, b) => {
+                    const priceA = parseInt(a.querySelector('.text-danger')?.textContent.replace(/[^\d]/g, '') || 0);
+                    const priceB = parseInt(b.querySelector('.text-danger')?.textContent.replace(/[^\d]/g, '') || 0);
+                    const yearA = parseInt(a.textContent.match(/Năm:\s*(\d+)/)?.[1] || 0);
+                    const yearB = parseInt(b.textContent.match(/Năm:\s*(\d+)/)?.[1] || 0);
+
+                    if (sortValue === 'price_asc') return priceA - priceB;
+                    if (sortValue === 'price_desc') return priceB - priceA;
+                    if (sortValue === 'year_desc') return yearB - yearA;
+                    if (sortValue === 'year_asc') return yearA - yearB;
+                    return 0;
+                });
+            }
+
+            // Apply
+            rows.forEach(r => r.style.display = 'none');
+            filtered.forEach(r => {
+                r.style.display = '';
+                table.appendChild(r);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', applyFilters);
+        document.getElementById('filterStatus').addEventListener('change', applyFilters);
+        document.getElementById('sortSelect').addEventListener('change', applyFilters);
     </script>
 
     <%- include('partials/footer') %>

@@ -6,12 +6,32 @@
             <p class="mb-0 text-muted">Admin có thể xem, duyệt & xóa xe trong hệ thống.</p>
         </div>
 
-        <!-- Thanh tìm kiếm -->
-        <div class="mb-3">
-            <div class="input-group">
-                <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
-                <input type="text" class="form-control" id="searchInput"
-                    placeholder="Tìm theo hãng xe, model, người bán...">
+        <!-- Thanh tìm kiếm và lọc -->
+        <div class="row mb-3 g-2">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" class="form-control" id="searchInput"
+                        placeholder="Tìm theo hãng xe, model, người bán...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="filterStatus">
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="active">Đang hiện</option>
+                    <option value="pending">Chờ duyệt</option>
+                    <option value="sold">Đã bán</option>
+                    <option value="expired">Hết hạn</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="sortSelect">
+                    <option value="default">Sắp xếp mặc định</option>
+                    <option value="price_asc">Giá tăng dần</option>
+                    <option value="price_desc">Giá giảm dần</option>
+                    <option value="year_desc">Năm mới nhất</option>
+                    <option value="year_asc">Năm cũ nhất</option>
+                </select>
             </div>
         </div>
 
@@ -74,7 +94,8 @@
                                                 </div>
                                             </td>
                                             <td class="text-danger fw-bold">
-                                                <%= item.price ? item.price.toLocaleString('vi-VN') : '-' %> ₫
+                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                                    }).format(item.price) %>
                                             </td>
                                             <td>
                                                 <%= item.mileage ? item.mileage.toLocaleString('vi-VN') : 0 %> km
@@ -202,15 +223,62 @@
             }
         });
 
-        // Tìm kiếm xe
-        document.getElementById('searchInput').addEventListener('keyup', function () {
-            const filter = this.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
-            rows.forEach(row => {
+        // Tìm kiếm và lọc xe
+        const table = document.querySelector('tbody');
+        const rows = Array.from(document.querySelectorAll('tbody tr'));
+
+        function applyFilters() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('filterStatus').value;
+            const sortValue = document.getElementById('sortSelect').value;
+
+            // Filter
+            let filtered = rows.filter(row => {
                 const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(filter) ? '' : 'none';
+                const badges = row.querySelectorAll('.badge');
+                let status = '';
+                badges.forEach(b => {
+                    const t = b.textContent.toLowerCase();
+                    if (t.includes('hiện')) status = 'active';
+                    else if (t.includes('duyệt')) status = 'pending';
+                    else if (t.includes('bán')) status = 'sold';
+                    else if (t.includes('hạn')) status = 'expired';
+                });
+
+                const matchSearch = text.includes(searchText);
+                const matchStatus = statusFilter === 'all' || status === statusFilter;
+
+                return matchSearch && matchStatus;
             });
-        });
+
+            // Sort
+            if (sortValue !== 'default') {
+                filtered.sort((a, b) => {
+                    const priceA = parseInt(a.querySelector('.text-danger')?.textContent.replace(/[^\d]/g, '') || 0);
+                    const priceB = parseInt(b.querySelector('.text-danger')?.textContent.replace(/[^\d]/g, '') || 0);
+                    const yearMatch = (row) => row.textContent.match(/Năm:\s*(\d+)/);
+                    const yearA = parseInt(a.textContent.match(/Năm:\s*(\d+)/)?.[1] || 0);
+                    const yearB = parseInt(b.textContent.match(/Năm:\s*(\d+)/)?.[1] || 0);
+
+                    if (sortValue === 'price_asc') return priceA - priceB;
+                    if (sortValue === 'price_desc') return priceB - priceA;
+                    if (sortValue === 'year_desc') return yearB - yearA;
+                    if (sortValue === 'year_asc') return yearA - yearB;
+                    return 0;
+                });
+            }
+
+            // Apply
+            rows.forEach(r => r.style.display = 'none');
+            filtered.forEach(r => {
+                r.style.display = '';
+                table.appendChild(r);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', applyFilters);
+        document.getElementById('filterStatus').addEventListener('change', applyFilters);
+        document.getElementById('sortSelect').addEventListener('change', applyFilters);
     </script>
 
     <%- include('partials/footer') %>
