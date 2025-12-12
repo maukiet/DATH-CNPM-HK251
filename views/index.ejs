@@ -3,63 +3,125 @@
     <!-- HERO SECTION -->
     <header class="hero-section text-center">
         <div class="container position-relative z-1">
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle mb-3 px-3 py-2 rounded-pill">
-                <i class="fas fa-star me-2"></i> #1 Nền tảng mua bán xe uy tín
-            </span>
-            <h1 class="hero-title mb-3">Tìm chiếc xe mơ ước<br>thật dễ dàng</h1>
-            <p class="lead fs-5 text-muted mb-5 mx-auto" style="max-width: 600px;">
-                Hàng ngàn xe chất lượng cao được kiểm định nghiêm ngặt.
-                Minh bạch về giá, an tâm về chất lượng.
-            </p>
 
-            <!-- Floating Search Container -->
-            <div class="search-container mx-auto" style="max-width: 900px;">
-                <div class="search-card glass-panel">
-                    <form action="/search" method="GET">
-                        <div class="row g-3 align-items-end">
-                            <div class="col-lg-5 col-md-12 text-start">
-                                <label class="form-label fw-bold small text-muted text-uppercase ls-1">Tìm kiếm</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0"><i
-                                            class="fas fa-search text-muted"></i></span>
-                                    <input type="text" name="q" id="heroSearchInput"
-                                        class="form-control border-start-0 ps-0" placeholder="Nhập tên xe, hãng xe..."
-                                        value="<%= typeof query !== 'undefined' ? query : '' %>">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-3 col-md-6 text-start">
-                                <label class="form-label fw-bold small text-muted text-uppercase ls-1">Hãng xe</label>
-                                <select name="brand" class="form-select form-select-md">
-                                    <% const selectedBrandSafe=typeof selectedBrand !=='undefined' ? selectedBrand
-                                        : 'all' ; const brandOptions=brands || []; %>
-                                        <option value="all" <%=selectedBrandSafe==='all' ? 'selected' : '' %>>Tất cả
-                                            hãng</option>
-                                        <% brandOptions.forEach(function(b) { %>
-                                            <option value="<%= b.brand %>" <%=selectedBrandSafe===b.brand ? 'selected'
-                                                : '' %>>
-                                                <%= b.brand %>
-                                            </option>
-                                            <% }); %>
-                                </select>
-                            </div>
-
-                            <div class="col-lg-4 col-md-12 d-grid">
-                                <label class="form-label d-none d-lg-block">&nbsp;</label>
-                                <button type="submit" class="btn btn-primary py-2">
-                                    Khám phá ngay
-                                </button>
-                            </div>
+            <!-- HERO CAROUSEL SLIDER - Xe đang bán chạy -->
+            <% if (sliderCars && sliderCars.length> 0) { %>
+                <div class="hero-carousel-wrapper mb-4">
+                    <h5 class="text-uppercase fw-bold mb-3">
+                        <i class="fas fa-fire text-danger me-2"></i>Xe đang bán chạy
+                    </h5>
+                    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                        <div class="carousel-indicators">
+                            <% sliderCars.forEach(function(car, index) { %>
+                                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="<%= index %>"
+                                    class="<%= index === 0 ? 'active' : '' %>"
+                                    aria-current="<%= index === 0 ? 'true' : 'false' %>"
+                                    aria-label="Slide <%= index + 1 %>"></button>
+                                <% }); %>
                         </div>
-                    </form>
+                        <div class="carousel-inner rounded-4 overflow-hidden shadow-lg">
+                            <% sliderCars.forEach(function(car, index) { %>
+                                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                    <a href="/cars/<%= car.id %>" class="carousel-link">
+                                        <img src="<%= car.image_url || 'https://via.placeholder.com/1200x500?text=BKGENESIS' %>"
+                                            class="d-block w-100 carousel-img" alt="<%= car.brand %> <%= car.model %>"
+                                            onerror="this.onerror=null;this.src='https://via.placeholder.com/1200x500?text=No+Image';">
+                                        <div class="carousel-caption-custom">
+                                            <span class="badge bg-primary mb-2">
+                                                <%= car.brand %>
+                                            </span>
+                                            <h4 class="mb-1">
+                                                <%= car.brand %>
+                                                    <%= car.model %>
+                                            </h4>
+                                            <p class="mb-2 carousel-price">
+                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                                    }).format(car.price) %>
+                                            </p>
+                                            <span class="btn btn-light btn-sm">
+                                                Xem chi tiết <i class="fas fa-arrow-right ms-1"></i>
+                                            </span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <% }); %>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
+                <% } %>
+
+                    <span
+                        class="badge bg-primary-subtle text-primary border border-primary-subtle mb-3 px-3 py-2 rounded-pill">
+                        <i class="fas fa-star me-2"></i> #1 Nền tảng mua bán xe uy tín
+                    </span>
+                    <h1 class="hero-title mb-3">Tìm chiếc xe mơ ước<br>thật dễ dàng</h1>
+                    <p class="lead fs-5 text-muted mb-5 mx-auto" style="max-width: 600px;">
+                        Hàng ngàn xe chất lượng cao được kiểm định nghiêm ngặt.
+                        Minh bạch về giá, an tâm về chất lượng.
+                    </p>
+
+                    <!-- Floating Search Container -->
+                    <div class="search-container mx-auto" style="max-width: 900px;">
+                        <div class="search-card glass-panel">
+                            <form action="/search" method="GET">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-lg-5 col-md-12 text-start">
+                                        <label class="form-label fw-bold small text-muted text-uppercase ls-1">Tìm
+                                            kiếm</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i
+                                                    class="fas fa-search text-muted"></i></span>
+                                            <input type="text" name="q" id="heroSearchInput"
+                                                class="form-control border-start-0 ps-0"
+                                                placeholder="Nhập tên xe, hãng xe..."
+                                                value="<%= typeof query !== 'undefined' ? query : '' %>">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-6 text-start">
+                                        <label class="form-label fw-bold small text-muted text-uppercase ls-1">Hãng
+                                            xe</label>
+                                        <select name="brand" class="form-select form-select-md">
+                                            <% const selectedBrandSafe=typeof selectedBrand !=='undefined' ?
+                                                selectedBrand : 'all' ; const brandOptions=brands || []; %>
+                                                <option value="all" <%=selectedBrandSafe==='all' ? 'selected' : '' %>
+                                                    >Tất cả
+                                                    hãng</option>
+                                                <% brandOptions.forEach(function(b) { %>
+                                                    <option value="<%= b.brand %>" <%=selectedBrandSafe===b.brand
+                                                        ? 'selected' : '' %>>
+                                                        <%= b.brand %>
+                                                    </option>
+                                                    <% }); %>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-12 d-grid">
+                                        <label class="form-label d-none d-lg-block">&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary py-2">
+                                            Khám phá ngay
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
         </div>
     </header>
 
     <div class="container py-5" id="car-list">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h3 class="fw-bold m-0"><i class="fas fa-fire text-danger me-2"></i>Xe đang bán chạy</h3>
+            <h3 class="fw-bold m-0"><i class="fas fa-car text-primary me-2"></i>Danh sách xe</h3>
 
             <div class="d-flex align-items-center gap-2">
                 <span class="text-muted small fw-bold text-uppercase d-none d-md-block">Sắp xếp:</span>

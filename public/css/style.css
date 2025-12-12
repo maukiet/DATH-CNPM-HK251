@@ -410,6 +410,123 @@ footer a:hover {
     -webkit-text-fill-color: transparent;
 }
 
+/* Hero Carousel Slider */
+.hero-carousel-wrapper {
+    max-width: 900px;
+    margin: 0 auto 2rem;
+}
+
+.hero-carousel-wrapper h5 {
+    color: var(--text-main);
+}
+
+#heroCarousel {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.carousel-img {
+    height: 400px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.carousel-link {
+    display: block;
+    position: relative;
+}
+
+.carousel-link:hover .carousel-img {
+    transform: scale(1.03);
+}
+
+.carousel-caption-custom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+    color: white;
+    text-align: left;
+}
+
+.carousel-caption-custom h4 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.carousel-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#heroCarousel:hover .carousel-control-prev,
+#heroCarousel:hover .carousel-control-next {
+    opacity: 1;
+}
+
+.carousel-control-prev {
+    left: 1rem;
+}
+
+.carousel-control-next {
+    right: 1rem;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1) grayscale(100);
+}
+
+.carousel-indicators {
+    margin-bottom: 1rem;
+}
+
+.carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+}
+
+.carousel-indicators button.active {
+    background-color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .carousel-img {
+        height: 250px;
+    }
+
+    .carousel-caption-custom {
+        padding: 1rem;
+    }
+
+    .carousel-caption-custom h4 {
+        font-size: 1rem;
+    }
+
+    .carousel-price {
+        font-size: 1rem;
+    }
+}
+
 /* Search Bar - FIXED LAYOUT */
 /* Removed negative margin to prevent text overlap. 
    Now it sits below the hero content naturally. */

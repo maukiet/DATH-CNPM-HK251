@@ -67,6 +67,7 @@ exports.getHomePage = (req, res) => {
                 console.error('getHomePage count error:', countErr);
                 return res.render('index', {
                     cars: [],
+                    sliderCars: [],
                     active: 'home',
                     brands,
                     query: keyword,
@@ -87,6 +88,7 @@ exports.getHomePage = (req, res) => {
                     console.error('getHomePage cars error:', err);
                     return res.render('index', {
                         cars: [],
+                        sliderCars: [],
                         active: 'home',
                         brands,
                         query: keyword,
@@ -98,16 +100,25 @@ exports.getHomePage = (req, res) => {
                     });
                 }
 
-                return res.render('index', {
-                    cars: carResults,
-                    active: 'home',
-                    brands,
-                    query: keyword,
-                    selectedBrand,
-                    sort: sortOption,
-                    currentPage,
-                    totalPages,
-                    totalCars
+                // Lấy 5 xe random cho slider
+                const sliderSql = 'SELECT * FROM cars WHERE status = "available" ORDER BY RAND() LIMIT 5';
+                db.query(sliderSql, (sliderErr, sliderResults) => {
+                    if (sliderErr) {
+                        console.error('getHomePage slider error:', sliderErr);
+                    }
+
+                    return res.render('index', {
+                        cars: carResults,
+                        sliderCars: sliderResults || [],
+                        active: 'home',
+                        brands,
+                        query: keyword,
+                        selectedBrand,
+                        sort: sortOption,
+                        currentPage,
+                        totalPages,
+                        totalCars
+                    });
                 });
             });
         });
