@@ -51,6 +51,8 @@
 
 ### 💳 Thanh toán
 - Đặt cọc qua PayPal Sandbox ($100)
+- Mua đứt xe qua PayPal
+- Xem lịch sử hóa đơn/giao dịch
 
 ### 🔐 Quản trị (Admin)
 - Quản lý danh sách người dùng
@@ -58,9 +60,11 @@
 - Thống kê xe theo hãng (Chart.js)
 
 ### 🌓 Giao diện
+- Slider xe bán chạy (Swiper.js) với hiệu ứng center mode
 - Hỗ trợ Dark Mode / Light Mode
 - Responsive trên mọi thiết bị
 - Thiết kế hiện đại với Bootstrap 5
+- Click vào ảnh xe để xem chi tiết
 
 ---
 
@@ -77,6 +81,7 @@
 | **Payment** | PayPal REST SDK (Sandbox) |
 | **Email** | Nodemailer |
 | **File Upload** | Multer |
+| **Carousel** | Swiper.js |
 
 ---
 
@@ -198,6 +203,9 @@ PAYPAL_CLIENT_SECRET=your_paypal_client_secret
 # Email (optional - for password reset)
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
+
+# Base URL (for ngrok deployment)
+BASE_URL=http://localhost:3000
 ```
 
 ---
@@ -244,6 +252,7 @@ Truy cập: **http://localhost:3000**
 | `/admin/cars` | Quản lý xe (Admin) |
 | `/news` | Tin tức xe |
 | `/about` | Về chúng tôi |
+| `/invoices` | Lịch sử hóa đơn/giao dịch |
 
 ---
 
