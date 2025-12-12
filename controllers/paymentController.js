@@ -37,8 +37,8 @@ exports.createPayment = (req, res) => {
             "payment_method": "paypal"
         },
         "redirect_urls": {
-            "return_url": "http://localhost:3000/pay/success",
-            "cancel_url": "http://localhost:3000/pay/cancel"
+            "return_url": `${process.env.BASE_URL || 'http://localhost:3000'}/pay/success`,
+            "cancel_url": `${process.env.BASE_URL || 'http://localhost:3000'}/pay/cancel`
         },
         "transactions": [{
             "item_list": {
