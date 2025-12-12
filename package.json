@@ -1,4 +1,15 @@
 {
+  "name": "bkgenesis",
+  "version": "1.0.0",
+  "description": "BKGENESIS - Nền tảng mua bán xe uy tín",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.1",
