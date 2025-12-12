@@ -443,6 +443,19 @@ footer a:hover {
     height: 240px;
     object-fit: cover;
     border-bottom: 1px solid var(--border-color);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Clickable Car Image Link */
+.car-image-link {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.car-image-link:hover .card-img-top {
+    transform: scale(1.05);
+    filter: brightness(1.1);
 }
 
 .price-tag {

@@ -93,9 +93,11 @@
                         <div class="col-md-4">
                             <div class="card car-card h-100">
                                 <div class="position-relative">
-                                    <img src="<%= car.image_url || 'https://via.placeholder.com/400x240?text=BKGENESIS' %>"
-                                        alt="<%= car.brand %> <%= car.model %>" class="card-img-top" loading="lazy"
-                                        onerror="this.onerror=null;this.src='https://via.placeholder.com/400x240?text=No+Image';">
+                                    <a href="/cars/<%= car.id %>" class="car-image-link">
+                                        <img src="<%= car.image_url || 'https://via.placeholder.com/400x240?text=BKGENESIS' %>"
+                                            alt="<%= car.brand %> <%= car.model %>" class="card-img-top" loading="lazy"
+                                            onerror="this.onerror=null;this.src='https://via.placeholder.com/400x240?text=No+Image';">
+                                    </a>
                                     <span
                                         class="position-absolute top-0 start-0 m-3 badge bg-white text-dark shadow-sm">
                                         <%= car.year %>
